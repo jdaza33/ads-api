@@ -63,6 +63,28 @@ app.get('/trucks', async (req, res, next) => {
   }
 })
 
+app.get('/trucks/:id', async (req, res, next) => {
+  try {
+    const truck = await Trucks.findOne({ _id: req.params.id })
+    // .sort({ createdAt: -1 })
+    res.json({ success: true, truck })
+  } catch (error) {
+    console.log('error', error)
+    res.status(403).json({ error })
+  }
+})
+
+app.delete('/trucks/:id', async (req, res, next) => {
+  try {
+    await Trucks.deleteOne({ _id: req.params.id })
+    // .sort({ createdAt: -1 })
+    res.json({ success: true })
+  } catch (error) {
+    console.log('error', error)
+    res.status(403).json({ error })
+  }
+})
+
 app.post('/trucks/create', async (req, res, next) => {
   try {
     const data = req.body
