@@ -38,6 +38,7 @@ const Trucks = mongoose.model(
     suspension: String,
     norm: String,
     energy: String,
+    axis: String,
     price: String,
     description: String,
     linkVideo: String,
