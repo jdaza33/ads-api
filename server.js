@@ -45,6 +45,54 @@ const Trucks = mongoose.model(
   })
 )
 
+const TrucksTwo = mongoose.model(
+  'TrucksTwo',
+  mongoose.Schema({
+    ref: String,
+    bodywork: String,
+    brand: String,
+    model: String,
+    condition: String,
+    year: String,
+    potency: Number,
+    type: String,
+    boxchg: String,
+    km: String,
+    seat: String,
+    suspension: String,
+    norm: String,
+    energy: String,
+    axis: String,
+    price: String,
+    description: String,
+    linkVideo: String,
+  })
+)
+
+const TrucksThree = mongoose.model(
+  'TrucksThree',
+  mongoose.Schema({
+    ref: String,
+    bodywork: String,
+    brand: String,
+    model: String,
+    condition: String,
+    year: String,
+    potency: Number,
+    type: String,
+    boxchg: String,
+    km: String,
+    seat: String,
+    suspension: String,
+    norm: String,
+    energy: String,
+    axis: String,
+    price: String,
+    description: String,
+    linkVideo: String,
+  })
+)
+
 // const admin = new Trucks({
 //   name: 'Test2',
 // })
@@ -56,9 +104,16 @@ app.use(express.json())
 /**TRUCKS */
 app.get('/trucks', async (req, res, next) => {
   try {
-    const trucks = await Trucks.find({})
-      // .sort({ createdAt: -1 })
-      .lean()
+    const { db } = req.query
+
+    const trucks =
+      db === '1'
+        ? await Trucks.find({})
+        : db === '2'
+        ? await TrucksTwo.find({})
+        : await TrucksThree.find({})
+            // .sort({ createdAt: -1 })
+            .lean()
     res.json({ success: true, truck: trucks })
   } catch (error) {
     console.log('error', error)
@@ -68,7 +123,15 @@ app.get('/trucks', async (req, res, next) => {
 
 app.get('/trucks/:id', async (req, res, next) => {
   try {
-    const truck = await Trucks.findOne({ _id: req.params.id })
+    const { db } = req.query
+
+    const truck =
+      db === '1'
+        ? await Trucks.findOne({ _id: req.params.id })
+        : db === '2'
+        ? await TrucksTwo.findOne({ _id: req.params.id })
+        : await TrucksThree.findOne({ _id: req.params.id })
+
     // .sort({ createdAt: -1 })
     res.json({ success: true, truck })
   } catch (error) {
@@ -79,7 +142,13 @@ app.get('/trucks/:id', async (req, res, next) => {
 
 app.delete('/trucks/:id', async (req, res, next) => {
   try {
-    await Trucks.deleteOne({ _id: req.params.id })
+    const { db } = req.query
+    db === '1'
+      ? await Trucks.deleteOne({ _id: req.params.id })
+      : db === '2'
+      ? await TrucksTwo.deleteOne({ _id: req.params.id })
+      : await TrucksThree.deleteOne({ _id: req.params.id })
+
     // .sort({ createdAt: -1 })
     res.json({ success: true })
   } catch (error) {
@@ -90,9 +159,17 @@ app.delete('/trucks/:id', async (req, res, next) => {
 
 app.post('/trucks/create', async (req, res, next) => {
   try {
+    const { db } = req.query
     const data = req.body
     // data.createdAt = Date.now()
-    const truck = await Trucks.create(data)
+
+    const truck =
+      db === '1'
+        ? await Trucks.create(data)
+        : db === '2'
+        ? await TrucksTwo.create(data)
+        : await TrucksThree.create(data)
+
     res.json({ success: true, truck })
   } catch (error) {
     console.log('error', error)
