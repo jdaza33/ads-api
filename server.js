@@ -10,7 +10,7 @@ const port = process.env.PORT || 3020
 const mongoose = require('mongoose')
 
 mongoose.connect(
-  process.env.PORT,
+  process.env.DB,
   (err, db) => {
     if (err) {
       console.log('Error al conectar la db')
